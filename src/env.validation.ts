@@ -1,5 +1,5 @@
 import { plainToClass } from 'class-transformer';
-import { IsEnum, IsPort, validateSync } from 'class-validator';
+import { IsEnum, IsPort, IsString, validateSync } from 'class-validator';
 
 enum Environment {
   Development = 'development',
@@ -12,6 +12,10 @@ export class EnvironmentVariables {
 
   @IsEnum(Environment)
   NODE_ENV = Environment.Development;
+
+  // API_KEY stored here only for demo purposes
+  @IsString()
+  WEATHER_API_KEY = '940cd8d7ac9737568d4081e5cc909ec3';
 }
 
 export function validate(config: Record<string, unknown>) {

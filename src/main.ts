@@ -9,8 +9,8 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
 
   app.enableCors();
-  app.use(express.json({ limit: '500kb' }));
-  app.use(express.urlencoded({ limit: '500kb', extended: true }));
+  app.use(express.json({ limit: '10kb' }));
+  app.use(express.urlencoded({ limit: '10kb', extended: true }));
 
   await app.listen(configService.get('PORT'));
 }
