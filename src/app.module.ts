@@ -13,9 +13,11 @@ import { validate } from './env.validation';
     ConfigModule.forRoot({ validate, isGlobal: true }),
     ThrottlerModule.forRoot([
       {
-        // 60 requests per minute
+        /**
+         * To avoid API bandwidth usage, I allow up to 10 requests per minute for a single user
+         */
         ttl: 60 * 1000,
-        limit: 60,
+        limit: 10,
       },
     ]),
   ],
