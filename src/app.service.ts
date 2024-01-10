@@ -63,52 +63,34 @@ export class AppService {
   }
 
   async findWeatherByCityName(query: string) {
-    try {
-      const queryURI = encodeURIComponent(query);
+    const queryURI = encodeURIComponent(query);
 
-      const { data } = await axios.get('/weather', {
-        params: {
-          q: queryURI,
-        },
-      });
+    const { data } = await axios.get('/weather', {
+      params: {
+        q: queryURI,
+      },
+    });
 
-      const weatherData = WeatherResponseSchema.parse(data);
+    const weatherData = WeatherResponseSchema.parse(data);
 
-      return {
-        celcius: {
-          temperature: this.getTemperatureInCelsius(weatherData.main.temp),
-          sensedTemperature: this.getTemperatureInCelsius(weatherData.main.feels_like),
-          minTemperature: this.getTemperatureInCelsius(weatherData.main.temp_min),
-          maxTemperature: this.getTemperatureInCelsius(weatherData.main.temp_max),
-        },
-        fahrenheit: {
-          temperature: this.getTemperatureInFahrenheit(weatherData.main.temp),
-          sensedTemperature: this.getTemperatureInFahrenheit(weatherData.main.feels_like),
-          minTemperature: this.getTemperatureInFahrenheit(weatherData.main.temp_min),
-          maxTemperature: this.getTemperatureInFahrenheit(weatherData.main.temp_max),
-        },
-        pressure: weatherData.main.pressure,
-        humidity: weatherData.main.humidity,
-        visibility: weatherData.visibility,
-        windSpeedKmPerHour: this.getWindSpeedInKilometersPerHour(weatherData.wind.speed),
-        cloudiness: weatherData.clouds.all,
-      };
-    } catch (error) {
-      if (Axios.isAxiosError(error)) {
-        if (error.status > 500 && error.status < 600) {
-          throw new Error('Weather API is not available');
-        }
-
-        throw error;
-      }
-
-      // I don't want to throw internal errors to the client, I'd implement some logger like f.e. Sentry
-      const internalErrorNames = ['SyntaxError', 'ReferenceError', 'TypeError', 'RangeError', 'URIError', 'EvalError'];
-      if (!internalErrorNames.includes(error.name)) {
-        throw error;
-      } else {
-        throw new Error('Internal server error');
-      }
-    }
+    return {
+      celcius: {
+        temperature: this.getTemperatureInCelsius(weatherData.main.temp),
+        sensedTemperature: this.getTemperatureInCelsius(weatherData.main.feels_like),
+        minTemperature: this.getTemperatureInCelsius(weatherData.main.temp_min),
+        maxTemperature: this.getTemperatureInCelsius(weatherData.main.temp_max),
+      },
+      fahrenheit: {
+        temperature: this.getTemperatureInFahrenheit(weatherData.main.temp),
+        sensedTemperature: this.getTemperatureInFahrenheit(weatherData.main.feels_like),
+        minTemperature: this.getTemperatureInFahrenheit(weatherData.main.temp_min),
+        maxTemperature: this.getTemperatureInFahrenheit(weatherData.main.temp_max),
+      },
+      pressure: weatherData.main.pressure,
+      humidity: weatherData.main.humidity,
+      visibility: weatherData.visibility,
+      windSpeedKmPerHour: this.getWindSpeedInKilometersPerHour(weatherData.wind.speed),
+      cloudiness: weatherData.clouds.all,
+    };
   }
 }
