@@ -1,7 +1,7 @@
-import { IsString, Length } from 'class-validator';
+import { IsString, MinLength } from 'class-validator';
 
 export class WeatherQueryDto {
   @IsString()
-  @Length(3)
+  @MinLength(3)
   query: string;
 }

@@ -26,7 +26,7 @@ export class AppController {
           throw new BadGatewayException('Weather API is down');
         }
 
-        throw new HttpException(error.message, error.status);
+        throw new HttpException(error.response?.data?.message ?? error.message, error.response.status ?? error.status);
       }
 
       // I don't want to throw internal errors to the client for a security reason, so I'd implement some logger like f.e. Sentry

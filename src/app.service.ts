@@ -20,6 +20,7 @@ axiosRetry(axios, { retries: 3 });
 
 // zod keeps our data types safe, throw clear error messages if some type is wrong
 const WeatherResponseSchema = z.object({
+  weather: z.array(z.object({ main: z.string() })),
   main: z.object({
     temp: z.number(),
     feels_like: z.number(),
@@ -35,6 +36,7 @@ const WeatherResponseSchema = z.object({
   clouds: z.object({
     all: z.number(),
   }),
+  name: z.string(),
 });
 
 const TEMPERATURE_FROM_KELVIN_VALUE = 273.15;
@@ -74,6 +76,8 @@ export class AppService {
     const weatherData = WeatherResponseSchema.parse(data);
 
     return {
+      cityName: weatherData.name,
+      description: weatherData.weather.slice(-1)[0]?.main,
       celcius: {
         temperature: this.getTemperatureInCelsius(weatherData.main.temp),
         sensedTemperature: this.getTemperatureInCelsius(weatherData.main.feels_like),
